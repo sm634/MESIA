@@ -69,7 +69,9 @@ class PdfToImage:
                     pages = convert_from_path(pdf,
                                               poppler_path=self.poppler_path)
                     file_name = pdf_names[j]
-                    self.__save_images_file(pages=pages, doc_name=file_name)
+                    # only save the last page as it contains all the information.
+                    page_to_save = [pages[-1]]
+                    self.__save_images_file(pages=page_to_save, doc_name=file_name)
                     print(f"image {file_name} saved")
                 except pdf2image.exceptions.PDFPageCountError:
                     print(f"Conversion Failed for {pdf}")
