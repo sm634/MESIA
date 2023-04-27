@@ -1,5 +1,4 @@
 from decouple import config
-import pandas as pd
 import openai
 
 openai.api_key = config('OPENAI_API_KEY')
@@ -13,8 +12,7 @@ class Prompts:
 
     @staticmethod
     def __extract_invoice_prompt(data_fields, invoice_text):
-        return f"""extract the values for the {data_fields} from the text below. Remove any commas between the numerical
-        values in the text. Then Return only the values, without their keys separated by comma:
+        return f"""extract the values for {data_fields} from the text below:
                 "{invoice_text}"
             """
 
@@ -30,4 +28,5 @@ class Prompts:
             temperature=self.temperature
         )
         extracted_values = response.choices[0].text
+        print("Extracting data field values")
         return extracted_values

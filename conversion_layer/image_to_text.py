@@ -22,7 +22,7 @@ class ImageToText:
             machine.
             """
             self.images_input_dir_path = 'data/input/images/'
-            self.images_output_dir_path = 'data/output/from_images/'
+            self.images_output_dir_path = 'data/input/text/'
 
     def __img_to_txt_file(self):
         """
