@@ -58,8 +58,12 @@ class PdfToImage:
             output_img = self.images_input_dir_path + image_name
             page.save(output_img, "JPEG")
 
-    def pdf_to_images(self):
-
+    def pdf_to_images(self, keep_last=True):
+        """
+        A function orchestrating all of the modular methods in this class to produce images from the pdf from a chosen
+        file path locally or another storage location. Saves output image files to designated folder.
+        :param keep_last: only save the image of the last page in the pdf.
+        """
         if self.data_source == 'directory':
             pdfs_paths = self.__get_pdf_file_paths()
             pdf_names = self.__get_pdf_names_file()
@@ -69,8 +73,13 @@ class PdfToImage:
                     pages = convert_from_path(pdf,
                                               poppler_path=self.poppler_path)
                     file_name = pdf_names[j]
+
                     # only save the last page as it contains all the information.
-                    page_to_save = [pages[-1]]
+                    if keep_last:
+                        page_to_save = [pages[-1]]
+                    else:
+                        page_to_save = pages
+
                     self.__save_images_file(pages=page_to_save, doc_name=file_name)
                     print(f"image {file_name} saved")
                 except pdf2image.exceptions.PDFPageCountError:

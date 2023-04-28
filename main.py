@@ -10,6 +10,7 @@ from extraction_layer.prompts import Prompts
 
 t1 = time()
 
+# store a variable with the pdf numbers as the index for the sheet.
 pdf_indexes = [item[0:item.index(" ")] for item in os.listdir('data/input/pdfs/')]
 
 """Pdfs to images step"""
@@ -27,10 +28,10 @@ text_utils = TextFiles(datasource='directory')
 invoices_list = text_utils.get_text_files_list()
 
 # initialise invoice class
-invoices = Invoice()
+invoices = Invoice(datasource='directory')
 
-data_fields_text = invoices.data_fields
-data_fields_list = data_fields_text.split(',')
+data_fields_text = invoices.data_fields_text
+data_fields_list = invoices.data_fields_list
 
 """Using GPT model prompt to extract fields"""
 # initialize GPT
