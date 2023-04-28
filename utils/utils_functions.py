@@ -1,5 +1,5 @@
 import os
-
+import re
 
 class TextFiles:
 
@@ -54,3 +54,28 @@ class Invoice:
                 self.data_fields_text = f.read()
 
             self.data_fields_list = self.data_fields_text.split(',')
+
+    @staticmethod
+    def standardise_invoice_df(df):
+        """
+        A method used to standardise
+        :param df: The input df
+        :return: df with standardised columns
+        """
+
+        def clean_doc_number(text):
+            doc_num_match = re.search(r"UMAR\d+", text)
+            if doc_num_match:
+                return doc_num_match.group()
+
+        columns = df.columns.to_list()
+
+        if 'GBP' in columns:
+            if df['GBP'].dtype == str:
+                df['GBP'] = df['GBP'].apply(lambda x: x.replace(',', ''))
+                df['GBP'] = df['GBP'].astype(float)
+
+        if 'DOCUMENT NUMBER' in columns:
+            df['DOCUMENT NUMBER'] = df['DOCUMENT NUMBER'].apply(lambda x: clean_doc_number(x))
+
+        return df

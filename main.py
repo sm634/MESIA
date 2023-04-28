@@ -41,7 +41,6 @@ print(f"Extraction of data fields: {data_fields_text} from source text files.")
 
 output_data_list = []
 for text, id in zip(invoices_list, pdf_indexes):
-
     invoice_data = prompts.extract_invoice_info(data_fields=data_fields_text, invoice_text=text, file_index=id)
     output_data_list.append(text_utils.txt_to_list(invoice_data))
 
@@ -50,6 +49,7 @@ print(f"Extraction complete.")
 output_df = pd.DataFrame(data=output_data_list, columns=data_fields_list)
 output_df['invoice_index'] = pdf_indexes
 output_df = output_df.set_index('invoice_index')
+output_df = invoices.standardise_invoice_df(output_df)
 
 print("Saving data to file.")
 output_df.to_csv("data/output/sample_output.csv")
