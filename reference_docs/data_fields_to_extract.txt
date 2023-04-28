@@ -1,1 +1,1 @@
-Document Number, Document Date, Account No., Payment Reference, Payment Terms, GBP
+Document Number,Document Date,Account No.,Payment Reference,Payment Terms,GBP

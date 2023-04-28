@@ -70,8 +70,11 @@ class PdfToImage:
             for j, pdf in enumerate(pdfs_paths):
                 try:
                     print(f'currently processing pdf file {pdf}')
-                    pages = convert_from_path(pdf,
-                                              poppler_path=self.poppler_path)
+                    pages = convert_from_path(pdf_path=pdf,
+                                              dpi=400,
+                                              thread_count=4,
+                                              poppler_path=self.poppler_path,
+                                              grayscale=True)
                     file_name = pdf_names[j]
 
                     # only save the last page as it contains all the information.
