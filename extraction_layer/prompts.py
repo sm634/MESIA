@@ -16,7 +16,7 @@ class Prompts:
                 "{invoice_text}"
             """
 
-    def extract_invoice_info(self, data_fields, invoice_text):
+    def extract_invoice_info(self, data_fields, invoice_text, file_index):
         """
         :param data_fields: values for data fields to extract
         :return: a string, comma separated with all of the values we require.
@@ -28,5 +28,5 @@ class Prompts:
             temperature=self.temperature
         )
         extracted_values = response.choices[0].text
-        print("Extracting data field values")
+        print(f"Extracting data field values from document {file_index}")
         return extracted_values
