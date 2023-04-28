@@ -40,8 +40,9 @@ prompts = Prompts()
 print(f"Extraction of data fields: {data_fields_text} from source text files.")
 
 output_data_list = []
-for text in invoices_list:
-    invoice_data = prompts.extract_invoice_info(data_fields=data_fields_text, invoice_text=text)
+for text, id in zip(invoices_list, pdf_indexes):
+
+    invoice_data = prompts.extract_invoice_info(data_fields=data_fields_text, invoice_text=text, file_index=id)
     output_data_list.append(text_utils.txt_to_list(invoice_data))
 
 print(f"Extraction complete.")
