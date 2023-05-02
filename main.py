@@ -34,14 +34,14 @@ data_fields_text = invoices.data_fields_text
 data_fields_list = invoices.data_fields_list
 
 """Using GPT model prompt to extract fields"""
-# initialize GPT
-prompts = Prompts()
+# initialize GPT and specify the model to use.
+prompts = Prompts(model='text-davinci-003')
 
 print(f"Extraction of data fields: {data_fields_text} from source text files.")
 
 output_data_list = []
-for text, id in zip(invoices_list, pdf_indexes):
-    invoice_data = prompts.extract_invoice_info(data_fields=data_fields_text, invoice_text=text, file_index=id)
+for text, i in zip(invoices_list, pdf_indexes):
+    invoice_data = prompts.extract_invoice_info(data_fields=data_fields_text, invoice_text=text, file_index=i)
     output_data_list.append(text_utils.txt_to_list(invoice_data))
 
 print(f"Extraction complete.")
