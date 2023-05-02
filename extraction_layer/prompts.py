@@ -11,7 +11,6 @@ class Prompts:
         self.temperature = temperature
         self.model = model
 
-
     @staticmethod
     def __extract_invoice_prompt(data_fields, invoice_text):
         return f"""extract the values for {data_fields}.
@@ -21,7 +20,9 @@ class Prompts:
                 Document Date: 01/05/21
                 Account No.: 101022
                 Payment Reference: UMAR123456 / 101022
-                Payment Terms: 90 days after month end
+                Payment Terms: 90 Days after month end
+                OR
+                Payment Terms: 50 Days Date of Invoice
                 GBP: 5,235.05
          
                 Extract those values from the text below:

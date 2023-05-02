@@ -2,6 +2,7 @@ import os
 
 import pytesseract
 from PIL import Image
+import cv2
 
 
 class ImageToText:
@@ -10,6 +11,7 @@ class ImageToText:
         pytesseract.pytesseract.tesseract_cmd = r'C:\Users\safmuk01\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
         self.data_source = datasource
+        self.custom_config = r'--oem 3 --psm 6'
 
         if self.data_source.lower() == 's3':
             pass
@@ -24,6 +26,18 @@ class ImageToText:
             self.images_input_dir_path = 'data/input/images/'
             self.images_output_dir_path = 'data/input/text/'
 
+    @staticmethod
+    def __create_bounding_boxes(image):
+        """Currently in development"""
+        h, w, c = image.shape
+        boxes = pytesseract.image_to_boxes(image)
+
+    def __prepare_image_text(self, image_path):
+
+        img = cv2.imread(image_path)
+
+        return pytesseract.image_to_string(img, config=self.custom_config)
+
     def __img_to_txt_file(self):
         """
         A function that grabs all input images, uses ocr from tesseract-ocr to convert them to text and saves them as a
@@ -36,7 +50,8 @@ class ImageToText:
         images_file = os.listdir(self.images_input_dir_path)
         for file in images_file:
             file_path = self.images_input_dir_path + file
-            text = pytesseract.image_to_string(Image.open(file_path))
+            # text = pytesseract.image_to_string(Image.open(file_path))
+            text = self.__prepare_image_text(file_path)
             # replace the extensions to text.
             for ext in file_extensions:
                 if ext in file:
