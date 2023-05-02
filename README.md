@@ -7,7 +7,7 @@ The lean nature of the application means that it can be repurposed for other tex
 
 ### Design Overview
 
-![MESIA](https://user-images.githubusercontent.com/50050912/235698296-6552773b-148b-4228-a6d0-d159111fb5f4.jpg)
+![MESIA](https://user-images.githubusercontent.com/50050912/235702279-94b33e08-066d-4c77-8423-279839f07320.jpg)
 
 ### Environment Set-up
 
