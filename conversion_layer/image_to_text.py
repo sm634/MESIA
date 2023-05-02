@@ -46,20 +46,20 @@ class ImageToText:
         :param output_dir: the output directory to save the converted text data into
         :return: text
         """
-        file_extensions = ['.jpg', '.png']
-        images_file = os.listdir(self.images_input_dir_path)
-        for file in images_file:
+        file_extension = '.jpg'
+        image_files = os.listdir(self.images_input_dir_path)
+        # only operate on files with the specified extension.
+        image_files = [file for file in image_files if file_extension in file]
+
+        for file in image_files:
             file_path = self.images_input_dir_path + file
-            # text = pytesseract.image_to_string(Image.open(file_path))
             text = self.__prepare_image_text(file_path)
             # replace the extensions to text.
-            for ext in file_extensions:
-                if ext in file:
-                    file = file.replace(ext, '.txt')
+            file = file.replace(file_extension, '.txt')
             with open(self.images_output_dir_path + file, 'w') as f:
                 f.write(text)
                 f.close()
-            print(f"image {file} converted to text and saved.")
+            print(f"Image converted to text and saved as {file}.")
 
     def img_to_txt(self):
 

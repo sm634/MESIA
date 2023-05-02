@@ -10,9 +10,6 @@ from extraction_layer.prompts import Prompts
 
 t1 = time()
 
-# store a variable with the pdf numbers as the index for the sheet.
-pdf_indexes = [item[0:item.index(" ")] for item in os.listdir('data/input/pdfs/')]
-
 """Pdfs to images step"""
 pdf_to_image = PdfToImage(datasource='directory')
 # save images
@@ -38,6 +35,9 @@ data_fields_list = invoices.data_fields_list
 prompts = Prompts(model='text-davinci-003')
 
 print(f"Extraction of data fields: {data_fields_text} from source text files.")
+
+# store a variable with the pdf numbers as the index for the sheet.
+pdf_indexes = [item[0:item.index(" ")] for item in os.listdir('data/input/pdfs/') if '.pdf' in item]
 
 output_data_list = []
 for text, i in zip(invoices_list, pdf_indexes):
