@@ -71,7 +71,7 @@ class PdfToImage:
                 try:
                     print(f'currently processing pdf file {pdf}')
                     pages = convert_from_path(pdf_path=pdf,
-                                              dpi=400,
+                                              dpi=500,
                                               thread_count=4,
                                               poppler_path=self.poppler_path,
                                               grayscale=True)
