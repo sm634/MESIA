@@ -5,6 +5,10 @@ An application that makes use of open source OCR and GPT in a relatively lean co
 
 The lean nature of the application means that it can be repurposed for other text extraction tasks with relatively small number of code development.
 
+### Design Overview
+
+![image](https://user-images.githubusercontent.com/50050912/235697704-a538b94e-f4d9-4ef2-94f6-777e8ef9b706.png)
+
 ### Environment Set-up
 
 The environment used for this requires the installation of tesseract-ocr for text recognition. If you use windows, you can install it from here: 
