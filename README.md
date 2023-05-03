@@ -31,6 +31,13 @@ Place the pdf invoices in the following directory of the project repository:
 Once the pdf invoices are placed in the specified directory. Run the following command in the terminal:
 
 ```python main.py```
+OR
+
+To make running the application simpler for non-technical end-users, run the batch file from the home directory of the repository.
+
+```run-mesia.bat```
+
+**Note: This is for Windows only
 
 The output .csv file will be available in once the execution has completed successfully.
 
