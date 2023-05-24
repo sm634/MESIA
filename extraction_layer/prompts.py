@@ -65,5 +65,6 @@ class Prompts:
                 max_tokens=self.max_tokens
             )
             extracted_values = response['choices'][0]['message']['content']
+            print(f"Extracting data field values from document {file_index}")
 
         return extracted_values

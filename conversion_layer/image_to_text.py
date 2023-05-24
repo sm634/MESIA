@@ -11,7 +11,7 @@ class ImageToText:
         pytesseract.pytesseract.tesseract_cmd = r'C:\Users\safmuk01\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
         self.data_source = datasource
-        self.custom_config = r'--oem 3 --psm 6'
+        self.custom_config = r'--oem 3 --psm 11'
 
         if self.data_source.lower() == 's3':
             pass
@@ -35,6 +35,7 @@ class ImageToText:
     def __prepare_image_text(self, image_path):
 
         img = cv2.imread(image_path)
+        img = cv2.resize(img, None, fx=2, fy=2)
 
         return pytesseract.image_to_string(img, config=self.custom_config)
 

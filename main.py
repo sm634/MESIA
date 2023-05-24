@@ -32,7 +32,7 @@ data_fields_list = invoices.data_fields_list
 
 """Using GPT model prompt to extract fields"""
 # initialize GPT and specify the model to use.
-prompts = Prompts(model='text-davinci-003')
+prompts = Prompts(model='gpt-3.5-turbo')
 
 print(f"Extraction of data fields: {data_fields_text} from source text files.")
 
