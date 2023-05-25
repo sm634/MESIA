@@ -5,8 +5,10 @@ from time import time
 
 from conversion_layer.pdf_to_image import PdfToImage
 from conversion_layer.image_to_text import ImageToText
+from conversion_layer.pdf_to_text import PdfText
 from utils.utils_functions import TextFiles, Invoice
 from extraction_layer.prompts import Prompts
+
 
 t1 = time()
 
@@ -20,6 +22,10 @@ img_to_text = ImageToText(datasource='directory')
 # save text
 img_to_text.img_to_txt()
 
+"""PDF to text option"""
+# test_obj = PdfText(datasource='directory')
+# test_obj.save_pdf_text()
+
 """Setup for model"""
 text_utils = TextFiles(datasource='directory')
 invoices_list = text_utils.get_text_files_list()
@@ -32,7 +38,7 @@ data_fields_list = invoices.data_fields_list
 
 """Using GPT model prompt to extract fields"""
 # initialize GPT and specify the model to use.
-prompts = Prompts(model='gpt-3.5-turbo')
+prompts = Prompts(model='text-davinci-003')
 
 print(f"Extraction of data fields: {data_fields_text} from source text files.")
 
