@@ -50,7 +50,7 @@ class Prompts:
             extracted_values = response.choices[0].text
             print(f"Extracting data field values from document {file_index}")
 
-        elif self.model == 'gpt-3.5-turbo':
+        elif self.model == 'gpt-3.5-turbo' or self.model == 'gpt-3.5-turbo-0301':
             response = openai.ChatCompletion.create(
                 model=self.model,
                 messages=[

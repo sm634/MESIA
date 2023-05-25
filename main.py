@@ -1,4 +1,5 @@
 import os
+import argparse
 
 import pandas as pd
 from time import time
@@ -6,25 +7,40 @@ from time import time
 from conversion_layer.pdf_to_image import PdfToImage
 from conversion_layer.image_to_text import ImageToText
 from conversion_layer.pdf_to_text import PdfText
-from utils.utils_functions import TextFiles, Invoice
+from utils.utils_functions import TextFiles, Invoice, Test,Folder
 from extraction_layer.prompts import Prompts
 
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--model', type=str, default='text-davinci-003',
+                    choices=['text-davinci-003', 'gpt-3.5-turbo', 'gpt-3.5-turbo-0301'])
+parser.add_argument('--extractor', type=str, default='pytesseract',
+                    choices=['pytesseract', 'pypdf'])
+parser.add_argument('--delete_files', type=str, default='true',
+                    choices=['true', 'false'])
+parser.add_argument('--run_test', type=str, default='true',
+                    choices=['true', 'false'])
+
+args = parser.parse_args()
+
 t1 = time()
 
-"""Pdfs to images step"""
-pdf_to_image = PdfToImage(datasource='directory')
-# save images
-pdf_to_image.pdf_to_images()
+if args.extractor == 'pytesseract':
+    """Pdfs to images step"""
+    pdf_to_image = PdfToImage(datasource='directory')
+    # save images
+    pdf_to_image.pdf_to_images()
 
-"""Images to text step"""
-img_to_text = ImageToText(datasource='directory')
-# save text
-img_to_text.img_to_txt()
+    """Images to text step"""
+    img_to_text = ImageToText(datasource='directory')
+    # save text
+    img_to_text.img_to_txt()
 
-"""PDF to text option"""
-# test_obj = PdfText(datasource='directory')
-# test_obj.save_pdf_text()
+elif args.extractor == 'pypdf':
+    """PDF to text option"""
+    pdfs = PdfText(datasource='directory')
+    pdfs.save_pdf_text()
 
 """Setup for model"""
 text_utils = TextFiles(datasource='directory')
@@ -38,7 +54,7 @@ data_fields_list = invoices.data_fields_list
 
 """Using GPT model prompt to extract fields"""
 # initialize GPT and specify the model to use.
-prompts = Prompts(model='text-davinci-003')
+prompts = Prompts(model=args.model)
 
 print(f"Extraction of data fields: {data_fields_text} from source text files.")
 
@@ -55,11 +71,27 @@ print(f"Extraction complete.")
 output_df = pd.DataFrame(data=output_data_list, columns=data_fields_list)
 output_df['invoice_index'] = pdf_indexes
 output_df = output_df.set_index('invoice_index')
-output_df = invoices.standardise_invoice_df(output_df)
 
 print("Saving data to file.")
-output_df.to_csv("data/output/sample_output.csv")
+output_file = f"{args.model}_{args.extractor}_output"
+output_df.to_csv("data/output/" + output_file + '.csv')
 
 t2 = (time() - t1)
 
 print(f"Saving finished. Process took {t2:.2f} seconds.")
+
+"""Clean up directories"""
+if args.delete_files == 'true':
+    img_dir = 'data/input/images/'
+    Folder.clear_directory(img_dir)
+    txt_dir = 'data/input/text/'
+    Folder.clear_directory(txt_dir)
+
+"""Run tests"""
+if args.run_test == 'true':
+    ref_df = pd.read_csv('data/output/reference_output.csv',
+                         index_col='invoice_index')
+    output_df = pd.read_csv('data/output/text-davinci-003_pytesseract_output.csv',
+                            index_col='invoice_index')
+    checked_df = Test.check_dfs_accuracy(ref_df, output_df)
+    checked_df.to_csv(f'data/output/{output_file}_check.csv')

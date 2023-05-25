@@ -13,6 +13,12 @@ class PdfText:
             self.pdf_input_dir_path = 'data/input/pdfs/'
             self.text_files_dir_path = 'data/input/text/'
 
+    def visitor_body(self, text, cm, tm, fontDict, fontSize):
+        parts = []
+        y = tm[5]
+        if y > 50 and y < 720:
+            parts.append(text)
+
     def extract_text_from_pdf(self, file_path):
         text = ""
         with open(file_path, 'rb') as file:
@@ -22,10 +28,10 @@ class PdfText:
             if not self.keep_last:
                 for page_number in range(num_pages):
                     page_obj = reader.pages[page_number]
-                    text += page_obj.extract_text()
+                    text += page_obj.extract_text(visitor_text=self.visitor_body)
             else:
                 page_obj = reader.pages[-1]
-                text += page_obj.extract_text()
+                text += page_obj.extract_text(visitor_text=self.visitor_body)
 
         return text
 

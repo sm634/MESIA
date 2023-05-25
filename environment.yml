@@ -12,3 +12,5 @@ dependencies:
       - flask==2.2.3
       - pytesseract==0.3.10
       - flask_wtf==1.1.1
+      - pypdf2
+      - pytest

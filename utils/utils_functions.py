@@ -1,5 +1,6 @@
 import os
 import re
+import pandas as pd
 
 class TextFiles:
 
@@ -75,7 +76,50 @@ class Invoice:
                 df['GBP'] = df['GBP'].apply(lambda x: x.replace(',', ''))
                 df['GBP'] = df['GBP'].astype(float)
 
-        if 'DOCUMENT NUMBER' in columns:
+        if 'Document Number' in columns:
             df['DOCUMENT NUMBER'] = df['DOCUMENT NUMBER'].apply(lambda x: clean_doc_number(x))
 
         return df
+
+
+class Test:
+    @staticmethod
+    def check_dfs_accuracy(ref_df, df2):
+        """
+        A function that compares the values of the ref output with model generated output.
+        :param ref_df: The correct, ref dataframe.
+        :param df2: The current dataframe processed.
+        :return: A Diff Dataframe with accuracy
+        """
+        checked_df = ref_df == df2
+
+        row_total_counts = ref_df.count(axis=1)
+        row_true_counts = checked_df[checked_df == True].count(axis=1)
+        row_accuracy = row_true_counts / row_total_counts
+
+        col_total_counts = ref_df.count(axis=0)
+        col_true_counts = checked_df[checked_df == True].count(axis=0)
+        col_accuracy = col_true_counts / col_total_counts
+
+        checked_df = pd.concat([checked_df, pd.DataFrame([col_accuracy])])
+        index_list = checked_df.index.to_list()
+        index_list[-1] = 'accuracy'
+        checked_df.index = index_list
+        checked_df['accuracy'] = row_accuracy
+
+        return checked_df
+
+
+class Folder:
+
+    @staticmethod
+    def clear_directory(folder_path):
+        """
+        Clear a directory from the kept folders.
+        :param folder_path: the path of to the folder, e.g. data/input/text/
+        """
+        files_list = os.listdir(folder_path)
+        files_list = [file for file in files_list if '.py' not in file]
+        for file in files_list:
+            os.remove(folder_path + file)
+            print(f"{file} deleted")
