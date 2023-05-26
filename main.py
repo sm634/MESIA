@@ -7,9 +7,8 @@ from time import time
 from conversion_layer.pdf_to_image import PdfToImage
 from conversion_layer.image_to_text import ImageToText
 from conversion_layer.pdf_to_text import PdfText
-from utils.utils_functions import TextFiles, Invoice, Test,Folder
+from utils.utils_functions import TextFiles, Invoice, Test, Folder
 from extraction_layer.prompts import Prompts
-
 
 parser = argparse.ArgumentParser()
 
@@ -42,6 +41,7 @@ elif args.extractor == 'pypdf':
     pdfs = PdfText(datasource='directory')
     pdfs.save_pdf_text()
 
+
 """Setup for model"""
 text_utils = TextFiles(datasource='directory')
 invoices_list = text_utils.get_text_files_list()
@@ -68,8 +68,10 @@ for text, i in zip(invoices_list, pdf_indexes):
 
 print(f"Extraction complete.")
 
+
 output_df = pd.DataFrame(data=output_data_list, columns=data_fields_list)
 output_df['invoice_index'] = pdf_indexes
+output_df['invoice_index'] = output_df['invoice_index'].astype(int)
 output_df = output_df.set_index('invoice_index')
 
 print("Saving data to file.")
@@ -89,9 +91,7 @@ if args.delete_files == 'true':
 
 """Run tests"""
 if args.run_test == 'true':
-    ref_df = pd.read_csv('data/output/reference_output.csv',
+    ref_df = pd.read_csv('reference_docs/reference_output.csv',
                          index_col='invoice_index')
-    output_df = pd.read_csv('data/output/text-davinci-003_pytesseract_output.csv',
-                            index_col='invoice_index')
     checked_df = Test.check_dfs_accuracy(ref_df, output_df)
     checked_df.to_csv(f'data/output/{output_file}_check.csv')

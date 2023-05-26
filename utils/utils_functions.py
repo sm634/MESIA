@@ -2,6 +2,7 @@ import os
 import re
 import pandas as pd
 
+
 class TextFiles:
 
     def __init__(self, datasource):
