@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--model', type=str, default='text-davinci-003',
                     choices=['text-davinci-003', 'gpt-3.5-turbo', 'gpt-3.5-turbo-0301'])
-parser.add_argument('--extractor', type=str, default='pytesseract',
+parser.add_argument('--extractor', type=str, default='pypdf',
                     choices=['pytesseract', 'pypdf'])
 parser.add_argument('--delete_files', type=str, default='true',
                     choices=['true', 'false'])
@@ -22,6 +22,9 @@ parser.add_argument('--run_test', type=str, default='true',
                     choices=['true', 'false'])
 
 args = parser.parse_args()
+
+print(f"Extractor used: {args.extractor}")
+print(f"Model used: {args.model}")
 
 t1 = time()
 
