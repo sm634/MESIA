@@ -35,6 +35,7 @@ class TextFiles:
         text_list = text.split('\n')
         text_list = [item for item in text_list if len(item) > 0]
         values_list = [item[item.index(':') + 2:] for item in text_list]
+        values_list = [item for item in values_list if len(item) > 0]
         return values_list
 
 

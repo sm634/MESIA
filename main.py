@@ -1,5 +1,6 @@
 import os
 import argparse
+import json
 
 import pandas as pd
 from time import time
@@ -9,16 +10,17 @@ from conversion_layer.image_to_text import ImageToText
 from conversion_layer.pdf_to_text import PdfText
 from utils.utils_functions import TextFiles, Invoice, Test, Folder
 from extraction_layer.prompts import Prompts
+from user_input_prompts import save_prompt_instructions
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--model', type=str, default='text-davinci-003',
+parser.add_argument('--model', type=str, default='gpt-3.5-turbo',
                     choices=['text-davinci-003', 'gpt-3.5-turbo', 'gpt-3.5-turbo-0301'])
 parser.add_argument('--extractor', type=str, default='pypdf',
                     choices=['pytesseract', 'pypdf'])
-parser.add_argument('--delete_files', type=str, default='true',
+parser.add_argument('--delete_files', type=str, default='false',
                     choices=['true', 'false'])
-parser.add_argument('--run_test', type=str, default='true',
+parser.add_argument('--run_test', type=str, default='false',
                     choices=['true', 'false'])
 
 args = parser.parse_args()
@@ -45,15 +47,25 @@ elif args.extractor == 'pypdf':
     pdfs.save_pdf_text()
 
 
+"""Initiate user input prompt information"""
+# run the prompt instructions inputted by the user.
+print("Processing User Input Prompt Instructions.")
+save_prompt_instructions()
+print("User Input Prompt Instructions processing complete.")
+f = open('reference_docs/prompt_instructions.json', mode='r')
+data = json.load(f)
+
+# Prepare the data fields to extract.
+data_fields_text = data['fields to extract']
+data_fields_list = data_fields_text.split(',')
+
+# Prepare the user input prompt.
+prompt = data['prompt']
+
 """Setup for model"""
 text_utils = TextFiles(datasource='directory')
 invoices_list = text_utils.get_text_files_list()
 
-# initialise invoice class
-invoices = Invoice(datasource='directory')
-
-data_fields_text = invoices.data_fields_text
-data_fields_list = invoices.data_fields_list
 
 """Using GPT model prompt to extract fields"""
 # initialize GPT and specify the model to use.
@@ -66,7 +78,10 @@ pdf_indexes = [item[0:item.index(" ")] for item in os.listdir('data/input/pdfs/'
 
 output_data_list = []
 for text, i in zip(invoices_list, pdf_indexes):
-    invoice_data = prompts.extract_invoice_info(data_fields=data_fields_text, invoice_text=text, file_index=i)
+    invoice_data = prompts.extract_invoice_info(data_fields=data_fields_text,
+                                                prompt_text=prompt,
+                                                invoice_text=text,
+                                                file_index=i)
     output_data_list.append(text_utils.txt_to_list(invoice_data))
 
 print(f"Extraction complete.")
