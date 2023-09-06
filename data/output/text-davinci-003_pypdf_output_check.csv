@@ -1,0 +1,12 @@
+,Document Number,Document Date,Account No.,Payment Reference,Payment Terms,GBP,accuracy
+54,True,True,False,True,False,True,0.6666666666666666
+55,True,True,False,True,False,True,0.6666666666666666
+56,True,True,False,True,True,True,0.8333333333333334
+57,True,True,False,True,True,True,0.8333333333333334
+58,True,True,False,True,True,True,0.8333333333333334
+59,True,True,False,True,True,True,0.8333333333333334
+60,True,True,False,True,False,True,0.6666666666666666
+61,True,True,False,True,False,True,0.6666666666666666
+62,True,True,False,True,False,True,0.6666666666666666
+63,True,True,False,True,True,True,0.8333333333333334
+accuracy,1.0,1.0,0.0,1.0,0.5,1.0,
